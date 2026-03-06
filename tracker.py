@@ -99,7 +99,11 @@ body {{
     color:#e2e8f0;
     padding:40px;
 }}
-
+.subtitle {{
+    color:#94a3b8;
+    margin-bottom:20px;
+    font-size:15px;
+}}
 h1 {{
     color:#22c55e;
 }}
@@ -147,6 +151,8 @@ a:hover {{
 <body>
 
 <h1>GRC Intelligence Tracker</h1>
+<p class="subtitle">
+Monitoring cyber intelligence and frameworkupdates across IASME, NCSC, TISAX, and ENS.</P>
 <div id="filters">
 <button onclick="filterResults('all')">All</button>
 <button onclick="filterResults('Cyber Essentials')">Cyber Essentials</button>
