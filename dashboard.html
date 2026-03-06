@@ -1,0 +1,61 @@
+
+<html>
+<head>
+<title>GRC Intelligence Dashboard</title>
+<style>
+body {
+    font-family: Arial;
+    background:#0b1220;
+    color:white;
+    padding:40px;
+}
+
+.card {
+    background:#111a33;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.tag {
+    background:#1f3a8a;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+a {
+    color:#8ab4ff;
+}
+</style>
+</head>
+
+<body>
+
+<h1>GRC Intelligence Tracker</h1>
+<p>Last updated: 2026-03-06 00:40</p>
+
+<div id="results"></div>
+
+<script>
+
+const data = [{"Source": "CISA News", "Title": "CISA Issues Updated RESURGE Malware Analysis Highlighting a Stealthy but Active Threat", "Link": "https://www.cisa.gov/news-events/news/cisa-issues-updated-resurge-malware-analysis-highlighting-stealthy-active-threat", "Tags": "General Cybersecurity"}, {"Source": "CISA News", "Title": "Immediate Action Required: CISA Issues Emergency Directive to Secure Cisco SD-WAN Systems", "Link": "https://www.cisa.gov/news-events/news/immediate-action-required-cisa-issues-emergency-directive-secure-cisco-sd-wan-systems", "Tags": "General Cybersecurity"}, {"Source": "CISA News", "Title": "CISA Announces New Town Halls to Engage with Stakeholders on Cyber Incident Reporting for Critical Infrastructure", "Link": "https://www.cisa.gov/news-events/news/cisa-announces-new-town-halls-engage-stakeholders-cyber-incident-reporting-critical-infrastructure", "Tags": "General Cybersecurity"}, {"Source": "CISA News", "Title": "CISA\u2019s 2025 Year in Review: Driving Security and Resilience Across Critical Infrastructure", "Link": "https://www.cisa.gov/news-events/news/cisas-2025-year-review-driving-security-and-resilience-across-critical-infrastructure", "Tags": "Operational Resilience"}, {"Source": "CISA News", "Title": "CISA Releases Guide to Help Critical Infrastructure Users Adopt More Secure Communication", "Link": "https://www.cisa.gov/news-events/news/cisa-releases-guide-help-critical-infrastructure-users-adopt-more-secure-communication", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Who is the Kimwolf Botmaster \u201cDort\u201d?", "Link": "https://krebsonsecurity.com/2026/02/who-is-the-kimwolf-botmaster-dort/", "Tags": "Vulnerability Management"}, {"Source": "Krebs on Security", "Title": "\u2018Starkiller\u2019 Phishing Service Proxies Real Login Pages, MFA", "Link": "https://krebsonsecurity.com/2026/02/starkiller-phishing-service-proxies-real-login-pages-mfa/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Kimwolf Botnet Swamps Anonymity Network I2P", "Link": "https://krebsonsecurity.com/2026/02/kimwolf-botnet-swamps-anonymity-network-i2p/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Patch Tuesday, February 2026 Edition", "Link": "https://krebsonsecurity.com/2026/02/patch-tuesday-february-2026-edition/", "Tags": "Vulnerability Management"}, {"Source": "Krebs on Security", "Title": "Please Don\u2019t Feed the Scattered Lapsus ShinyHunters", "Link": "https://krebsonsecurity.com/2026/02/please-dont-feed-the-scattered-lapsus-shiny-hunters/", "Tags": "General Cybersecurity"}];
+
+let htmlContent = "";
+
+data.forEach(item => {
+    htmlContent += `
+        <div class="card">
+        <h3><a href="${item.Link}" target="_blank">${item.Title}</a></h3>
+        <p><b>Source:</b> ${item.Source}</p>
+        <p><span class="tag">${item.Tags}</span></p>
+        </div>
+    `;
+})
+
+document.getElementById("results").innerHTML = htmlContent;
+
+</script>
+
+</body>
+</html>
