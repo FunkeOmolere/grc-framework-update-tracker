@@ -4,25 +4,32 @@ import csv
 import json
 from datetime import datetime
 import os
+#
 feeds = {
+
+    # Cyber intelligence
     "CISA News": "https://www.cisa.gov/news.xml",
     "Krebs on Security": "https://krebsonsecurity.com/feed/",
-    "BleepingComputer": "https://www.bleepingcomputer.com/feed/"
-}
 
+    # Framework / regulatory updates
+    "IASME Cyber Essentials": "https://iasme.co.uk/feed/",
+    "NCSC UK": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+
+    # Framework monitoring
+    "ENX / TISAX Updates": "https://news.google.com/rss/search?q=TISAX+cybersecurity",
+    "Spain ENS Updates": "https://news.google.com/rss/search?q=Spain+ENS+cybersecurity"
+}
 headers = {
     "User-Agent": "Mozilla/5.0"
 }
 
 keywords = {
-    "DORA": ["dora", "digital operational resilience"],
-    "NIS2": ["nis2", "nis 2"],
-    "ENS": ["ens", "esquema nacional de seguridad"],
-    "Cyber Essentials": ["cyber essentials", "cyber essentials plus"],
-    "GDPR": ["gdpr", "data protection", "privacy"],
-    "ISO 27001": ["iso 27001", "information security"],
-    "Vulnerability Management": ["vulnerability", "cve", "patch", "exploit"],
-    "Operational Resilience": ["operational resilience", "resilience", "third party risk"],
+    "Cyber Essentials": ["cyber essentials", "iasme"],
+    "NCSC Guidance": ["ncsc", "guidance", "security advisory"],
+    "TISAX": ["tisax", "enx"],
+    "Spain ENS": ["ens", "ccn", "ccn-cert"],
+    "Vulnerability Management": ["vulnerability", "patch", "cve"],
+    "Operational Resilience": ["resilience", "incident", "security update"]
 }
 results = []
 
