@@ -7,17 +7,22 @@ import os
 #
 feeds = {
 
-    # Cyber intelligence
-    "CISA News": "https://www.cisa.gov/news.xml",
-    "Krebs on Security": "https://krebsonsecurity.com/feed/",
+# Cyber intelligence
+"CISA News": "https://www.cisa.gov/news.xml",
+"Krebs on Security": "https://krebsonsecurity.com/feed/",
 
-    # Framework / regulatory updates
-    "IASME Cyber Essentials": "https://iasme.co.uk/feed/",
-    "NCSC UK": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
+# Framework / regulatory updates
+"IASME Cyber Essentials": "https://iasme.co.uk/feed/",
+"NCSC UK": "https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml",
 
-    # Framework monitoring
-    "ENX / TISAX Updates": "https://news.google.com/rss/search?q=TISAX+cybersecurity",
-    "Spain ENS Updates": "https://news.google.com/rss/search?q=Spain+ENS+cybersecurity"
+# Framework monitoring
+"ENX / TISAX Updates": "https://news.google.com/rss/search?q=TISAX+cybersecurity",
+"Spain ENS Updates": "https://news.google.com/rss/search?q=Spain+ENS+cybersecurity",
+
+# Vulnerabilities
+"CISA KEV": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.xml",
+"NVD CVE Feed": "https://nvd.nist.gov/feeds/xml/cve/misc/nvd-rss.xml"
+
 }
 headers = {
     "User-Agent": "Mozilla/5.0"
