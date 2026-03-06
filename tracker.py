@@ -119,8 +119,27 @@ h1 {{
     font-size:12px;
 }}
 
+#filters button {{
+    margin-right:8px;
+    padding:6px 12px;
+    background:#1d4ed8;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}}
+
+#filters button:hover {{
+    background:#2563eb;
+}}
+
 a {{
     color:#38bdf8;
+    text-decoration:none;
+}}
+
+a:hover {{
+    text-decoration:underline;
 }}
 </style>
 </head>
@@ -128,6 +147,13 @@ a {{
 <body>
 
 <h1>GRC Intelligence Tracker</h1>
+<div id="filters">
+<button onclick="filterResults('all')">All</button>
+<button onclick="filterResults('Cyber Essentials')">Cyber Essentials</button>
+<button onclick="filterResults('NCSC Guidance')">NCSC</button>
+<button onclick="filterResults('TISAX')">TISAX</button>
+<button onclick="filterResults('Spain ENS')">Spain ENS</button>
+</div>
 <p>Last updated: {timestamp}</p>
 
 <div id="results"></div>
