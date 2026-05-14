@@ -1,98 +1,590 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GRC Intelligence Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background:#020617;
-    color:#e2e8f0;
-    padding:40px;
-}
-.subtitle {
-    color:#94a3b8;
-    margin-bottom:20px;
-    font-size:15px;
-}
-h1 {
-    color:#22c55e;
-}
+  :root {
+    --bg: #f7f5f2;
+    --surface: #ffffff;
+    --surface-2: #f0ede8;
+    --border: #e2ddd6;
+    --text-primary: #1a1612;
+    --text-secondary: #6b6560;
+    --text-muted: #9e9890;
+    --accent: #c84b2f;
+    --accent-light: #fdf0ed;
+    --tag-dora: #1d4e89;
+    --tag-nis2: #2d6a4f;
+    --tag-bsi: #7b3f9e;
+    --tag-tisax: #c84b2f;
+    --tag-ens: #b5620a;
+    --tag-ce: #1a6b5c;
+    --tag-ncsc: #3d5a80;
+    --tag-vuln: #6b2d2d;
+    --tag-general: #4a4a4a;
+    --tag-ai: #5a2d82;
+    --tag-ops: #8a5200;
+  }
 
-.card {
-    background:#111827;
-    padding:18px;
-    border-radius:12px;
-    margin-bottom:18px;
-    border-left:4px solid #22c55e;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.tag {
-    background:#1d4ed8;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-}
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
 
-#filters button {
-    margin-right:8px;
-    padding:6px 12px;
-    background:#1d4ed8;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-#filters button:hover {
-    background:#2563eb;
-}
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
 
-a {
-    color:#38bdf8;
-    text-decoration:none;
-}
+  .logo-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
 
-a:hover {
-    text-decoration:underline;
-}
+  .logo-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-left: 6px;
+    margin-bottom: 3px;
+    animation: pulse 2s infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  .header-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 48px 40px;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .hero-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    line-height: 1.1;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  .stats-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 32px;
+    padding: 24px 48px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .stat-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 88px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-left: 2px;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-align: left;
+    transition: all 0.15s ease;
+    margin-bottom: 2px;
+  }
+
+  .filter-btn:hover { background: var(--surface-2); color: var(--text-primary); }
+
+  .filter-btn.active {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .filter-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .filter-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    padding: 1px 7px;
+    border-radius: 20px;
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(200,75,47,0.12);
+    color: var(--accent);
+  }
+
+  .content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .results-count {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .results-count span {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    animation: fadeUp 0.3s ease forwards;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover {
+    border-color: #ccc8c0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--text-primary);
+  }
+
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card-title a:hover { color: var(--accent); }
+
+  .card-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .card:hover .card-arrow {
+    transform: translate(2px, -2px);
+    color: var(--accent);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .card-source {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .card-source::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .tag-dora { background: #edf3fc; color: var(--tag-dora); }
+  .tag-nis2 { background: #edf7f2; color: var(--tag-nis2); }
+  .tag-bsi { background: #f5edfb; color: var(--tag-bsi); }
+  .tag-tisax { background: var(--accent-light); color: var(--tag-tisax); }
+  .tag-ens { background: #fdf4e7; color: var(--tag-ens); }
+  .tag-ce { background: #edf7f4; color: var(--tag-ce); }
+  .tag-ncsc { background: #edf2f8; color: var(--tag-ncsc); }
+  .tag-vuln { background: #fdf0f0; color: var(--tag-vuln); }
+  .tag-general { background: #f2f2f2; color: var(--tag-general); }
+  .tag-ai { background: #f4edfb; color: var(--tag-ai); }
+  .tag-ops { background: #fff8ed; color: var(--tag-ops); }
+
+  .empty {
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--text-muted);
+  }
+
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 48px;
+    margin-top: 40px;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .footer-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .footer-link:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .header, .hero, .footer { padding-left: 24px; padding-right: 24px; }
+    .main { grid-template-columns: 1fr; padding: 24px; }
+    .sidebar { position: static; display: flex; flex-wrap: wrap; gap: 8px; }
+    .stats-bar { padding: 16px 24px 0; gap: 20px; }
+    .hero-title { font-size: 30px; }
+  }
 </style>
 </head>
-
 <body>
 
-<h1>GRC Intelligence Tracker</h1>
-<p class="subtitle">
-Monitoring cyber intelligence and frameworkupdates across IASME, NCSC, TISAX, and ENS.</P>
-<div id="filters">
-<button onclick="filterResults('all')">All</button>
-<button onclick="filterResults('Cyber Essentials')">Cyber Essentials</button>
-<button onclick="filterResults('NCSC Guidance')">NCSC</button>
-<button onclick="filterResults('TISAX')">TISAX</button>
-<button onclick="filterResults('Spain ENS')">Spain ENS</button>
-</div>
-<p>Last updated: 2026-03-06 09:04</p>
+<header class="header">
+  <div class="header-inner">
+    <span class="logo-title">GRC Intelligence<span class="logo-dot"></span></span>
+    <span class="header-meta">Last updated: 2026-05-14 15:58</span>
+  </div>
+</header>
 
-<div id="results"></div>
+<div class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">EMEA Regulatory Intelligence</p>
+    <h1 class="hero-title">Framework Update Tracker</h1>
+    <p class="hero-sub">Monitoring regulatory changes, framework updates, and cyber intelligence across DORA, NIS2, BSI C5, TISAX, Spain ENS, Cyber Essentials, and NCSC guidance.</p>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num" id="total-count">—</span>
+    <span class="stat-label">Total Items</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <span class="stat-num">10</span>
+    <span class="stat-label">Frameworks</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <span class="stat-num">10</span>
+    <span class="stat-label">Sources</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <span class="stat-num">May 2026</span>
+    <span class="stat-label">Current</span>
+  </div>
+</div>
+
+<div class="main">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Filter by Framework</p>
+      <button class="filter-btn active" onclick="setFilter('all', this)">
+        <span class="filter-dot" style="background:#1a1612"></span>
+        All Items
+        <span class="filter-count" id="count-all">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('DORA', this)">
+        <span class="filter-dot" style="background:#1d4e89"></span>
+        DORA
+        <span class="filter-count" id="count-dora">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('NIS2', this)">
+        <span class="filter-dot" style="background:#2d6a4f"></span>
+        NIS2
+        <span class="filter-count" id="count-nis2">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('BSI C5', this)">
+        <span class="filter-dot" style="background:#7b3f9e"></span>
+        BSI C5
+        <span class="filter-count" id="count-bsi">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('EU AI Act', this)">
+        <span class="filter-dot" style="background:#5a2d82"></span>
+        EU AI Act
+        <span class="filter-count" id="count-ai">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('TISAX', this)">
+        <span class="filter-dot" style="background:#c84b2f"></span>
+        TISAX
+        <span class="filter-count" id="count-tisax">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('Spain ENS', this)">
+        <span class="filter-dot" style="background:#b5620a"></span>
+        Spain ENS
+        <span class="filter-count" id="count-ens">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('Cyber Essentials', this)">
+        <span class="filter-dot" style="background:#1a6b5c"></span>
+        Cyber Essentials
+        <span class="filter-count" id="count-ce">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('NCSC Guidance', this)">
+        <span class="filter-dot" style="background:#3d5a80"></span>
+        NCSC
+        <span class="filter-count" id="count-ncsc">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('Vulnerability Management', this)">
+        <span class="filter-dot" style="background:#6b2d2d"></span>
+        Vulnerability
+        <span class="filter-count" id="count-vuln">—</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('General Cybersecurity', this)">
+        <span class="filter-dot" style="background:#4a4a4a"></span>
+        General Cyber
+        <span class="filter-count" id="count-general">—</span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="content-header">
+      <p class="results-count">Showing <span id="showing-count">—</span> items</p>
+    </div>
+    <div id="results"></div>
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span>Built by <a href="https://funkeomolere.github.io" class="footer-link">Funke Omolere</a> · Part of the GRC Engineering Club</span>
+    <span>EMEA Practitioner Resource · MIT Licensed</span>
+  </div>
+</footer>
 
 <script>
+const data = [{"Source": "Krebs on Security", "Title": "Patch Tuesday, May 2026 Edition", "Link": "https://krebsonsecurity.com/2026/05/patch-tuesday-may-2026-edition/", "Tags": "Vulnerability Management"}, {"Source": "Krebs on Security", "Title": "Canvas Breach Disrupts Schools & Colleges Nationwide", "Link": "https://krebsonsecurity.com/2026/05/canvas-breach-disrupts-schools-colleges-nationwide/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Anti-DDoS Firm Heaped Attacks on Brazilian ISPs", "Link": "https://krebsonsecurity.com/2026/04/anti-ddos-firm-heaped-attacks-on-brazilian-isps/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "\u2018Scattered Spider\u2019 Member \u2018Tylerb\u2019 Pleads Guilty", "Link": "https://krebsonsecurity.com/2026/04/scattered-spider-member-tylerb-pleads-guilty/", "Tags": "Spain ENS"}, {"Source": "Krebs on Security", "Title": "Patch Tuesday, April 2026 Edition", "Link": "https://krebsonsecurity.com/2026/04/patch-tuesday-april-2026-edition/", "Tags": "Vulnerability Management"}, {"Source": "NCSC UK", "Title": "10 questions to ask when using AI models to find vulnerabilities", "Link": "https://www.ncsc.gov.uk/blogs/10-questions-ask-using-ai-models-find-vulnerabilities", "Tags": "General Cybersecurity"}, {"Source": "NCSC UK", "Title": "Preparing for a \u2018vulnerability patch wave\u2019", "Link": "https://www.ncsc.gov.uk/blogs/prepare-for-vulnerability-patch-wave", "Tags": "Vulnerability Management"}, {"Source": "NCSC UK", "Title": "Could your choice of metrics be harming your SOC?", "Link": "https://www.ncsc.gov.uk/blogs/could-your-choice-of-metrics-be-harming-your-soc", "Tags": "General Cybersecurity"}, {"Source": "NCSC UK", "Title": "Supporting AI adoption for UK cyber defence", "Link": "https://www.ncsc.gov.uk/blogs/supporting-ai-adoption-for-uk-cyber-defence", "Tags": "General Cybersecurity"}, {"Source": "NCSC UK", "Title": "Defending against China-nexus covert networks of compromised devices", "Link": "https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices", "Tags": "General Cybersecurity"}, {"Source": "ENX / TISAX Updates", "Title": "Beyond Compliance: Using CMMC, ISO 27001, and TISAX\u00ae to Strengthen Your Information Security Program - T\u00dcV S\u00dcD", "Link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxONWw5MngzWXk2U2VZaDI5YVRRSTBpbEhFQTlqUThrOUdHU3lvRF9rUFJIVUE5MlRRWUlOYV95YnpTVmYtZVFmeHZuX3VlZnAxalZYUkFaeV9GbzZEdzdkSU5KelI2UVNrN1pSMWNINzFpMWZzS25JYVZJYmEtbV84RUg0WURVN3FSMjVQa29vdHJDQkdkSVZzdGZHdjVwaFBwT1ZRN2ZwT2JDbDFJUUxYSXpTeEJHQQ?oc=5", "Tags": "TISAX"}, {"Source": "ENX / TISAX Updates", "Title": "ZEISS\u2019s Chief Transformation Officer on Why Cybersecurity Is a Board-Level Topic - Boston Consulting Group", "Link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1SU3NCM0ZSaGZxSWtla1lxYUptd0NUMzlXeHRfUERQVklvZkJ0bWZGVTdLa0NDelA2WUhRZnVrQ3dsNU14T0I5WUkyWFJ2S0pnQk9oZFVsaDVtVXVIa0FheUNSeThGNHR1ZVZqaEo3amJzWm9qQkZESW5mUGJTdw?oc=5", "Tags": "General Cybersecurity"}, {"Source": "ENX / TISAX Updates", "Title": "SRM Tech earns TISAX AL3 label, elevating automotive cybersecurity credentials - Telematics Wire", "Link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOdGhYdnd5M2NRaHVXTHV0czJzWl9wcHhibjlOTG1hVF9ZMF9GZU53LVVEMmRyYmh5OUhxNFJ1T3AyMWtnNDFMWG5FMlBMSFA0bGhSaU9TMnZzN0I5NVdiVUVKazMwQjh3X29Sd0s5dlg5ZkhqNm10Y1RYd01TaFlpWEYwcmdzZlh4bGktdW50X2FPV190bGtOU2M5RHVDZk9ORmQ5T0ZCQmc?oc=5", "Tags": "TISAX"}, {"Source": "ENX / TISAX Updates", "Title": "SRM Tech Achieves TISAX Assessment Level (AL3) Label Strengthening Its Automotive Cybersecurity Standards - Dailyhunt", "Link": "https://news.google.com/rss/articles/CBMimwJBVV95cUxQNlJva2JiQVZEQjdlaVlhcE1WdGpXQUN5SHNfQ3dqLTczaXFEdXRzQ2ZRQXZ1V2VHMnkyVUxFU1JreHBFdWcwZzh3TmZqVGkzVE5vQzVJNzhiVVZnUktWa2JOLU80ekZKd1JsWEVjT25PY1Q3NkJuWVVaSzAyaU1xbmdTaVE4cVBGT3c4cHNJenljZ1hvSWIwY2Z1cmtwOVEyRmVwWXpPVFdSNVJxbTFqZERUMjlTcW83ZnpOTG5fbzJITEVmVGRLWlRiM1RtSGpWdTRYQUZQdVhSZ3lzdzJNZnpUQXlQNzRwLTRWNWEwNlJPRDdLMjAtMkREZlhfRGNvbnAwbXM4a0xscHJHaHptVFlzdFFURTRnRVZj?oc=5", "Tags": "TISAX"}, {"Source": "ENX / TISAX Updates", "Title": "Telechips Earns TISAX Certification for Enhanced Mobility Competitiveness - Business Wire", "Link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQQ1lXMmRCU1o5VVk2VldFYTJpVG1sWDczS2c5MXpENGJZUnU0TE5rdVFPbFpiajg2SElvYXgxWUhnVVNxSUF0cFcwVkJQVVA2QnRTTjdXZVMyRkFOYW55cWVod3hpXzB1ZTN6V0tfLWZMaEtObzE0VWEwVnVnN0NOa1g4a1hLNmJBOVlhZTNYY3RFRHRPalZHdFMxSkxqRE95WkY0bHMtTW1KNDRQenJjS1pnNXBPRU9EalpRVG53YXAyREI5ZWk1c1Z3?oc=5", "Tags": "TISAX"}, {"Source": "Spain ENS Updates", "Title": "Varonis gets Spain's highest ENS security certification - Stock Titan", "Link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOUU5mQlBjeFhjNnV2RlZTcVlrUkNPRXhKbFhDc0RlNVl1dTlSZUF5eXdmcU14V0pVa1RPVVV3Q21ITVlQWE5DUklfYlk4aENxQ0JxbG1fMEUydmd1ZnlxbXdhZl9WOUhRQ1BuaHVHSzZtbU5hR0YyTkxUOEZXUzhxVUlCM2RqOUVucGY1YW9rNVhaclFENi15bEFHQVR0V1ZSZjhYcTB2QkNNYXdSQnhvdVljMTlpRzJH?oc=5", "Tags": "TISAX, Spain ENS"}, {"Source": "Spain ENS Updates", "Title": "Spain: CCN publishes infographics on NIS2 compliance - DataGuidance", "Link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQZzd1aFFXWDQ0Wlh3M0o0OThzM3lNeG1CVXpvQjJKWEFHOG5TcUUySzJ4S0QwRzRBTEVDRktkRkd2QVBfZFg3eDBmVGkxOWpKTEdyMlJfWWdKeFR6ZHRIbzJycjFhb3hpSVVxNWNLOE84WktDQkFWTGZ3bVI4V0NjQnZNaFl2QTM4OFE?oc=5", "Tags": "Spain ENS, NIS2"}, {"Source": "Spain ENS Updates", "Title": "Yubico Announces Availability of the YubiKey 5 CCN Series, First Hardware Security Key to Secure 'ENS Alta' Rating in Spanish National Cryptologic Center (CCN)'s CPSTIC Catalogue - Yahoo Finance", "Link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNQWpmTUxFWDdpWV9KXzc2T0VsaDdqZnFnZzRMTHVJSVBLNTRfdTk2Q21POEdBTzV1cEwyczhOZGl0NDl5YlVDejZNNnQwS0ZfOG12QTVzMlF6SHFkREJwNHJ2a01IOHA2VGNuaFVheHpUWlVlWFNMSGI3dmJIWlFzOFlXY3QwUEZHVkxKVUZB?oc=5", "Tags": "Spain ENS"}, {"Source": "Spain ENS Updates", "Title": "Embracing our broad responsibility for securing digital infrastructure in the European Union - Amazon Web Services (AWS)", "Link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPZU5NRUFvTXR4MjNIeC1fMHBLbWVSdTl4eFNJblBwcU5LamtneHlDTnB0TTExZi1fbGltazJzZlliNzVnUDRDWFJxUTE0TncxTTd6d3VUakNUTU5fNE5EN2kzbVdoeDJURnVobVgtU1luQndCRDF2UXFRR0ZhRTJJem5wTDZxZXFKMmwxZXMxNVpxMTRudUV2UHVTSWo3Y1N3UzVvNHFQVWoyekxuZm84V3ZYNWIwUkJOSmRFUXotcTRiZlhreGNuaTV5RQ?oc=5", "Tags": "General Cybersecurity"}, {"Source": "Spain ENS Updates", "Title": "Black Book: Spain's Hospital IT Race Has Shifted from National Progress to Regional Performance - newswire.com", "Link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPNWhhb0hvUWpJZHdqRDVLNm14T1hYVFJfMzlQRnFjU29ULXdUQTR4M19RWGMza1pNRnB6Tk9yRzl6OHVIZWJnczBQREVkb0xROE5pckYtSUR2SGZPRXh3bVg1MWhlOHp4cEtzX3VhY2pVVW9rQkFEWktRVXUzQWRLUnNNN3hzM09rMkd4cFhJTW55T2tsQzZ6QnBoR2kxMTRDanNBdHlkRVZrNERf?oc=5", "Tags": "General Cybersecurity"}, {"Source": "DORA Updates", "Title": "From Compliance to Resilience: Delivering DORA in Practice - KPMG", "Link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQLXRNUWVubzRXY2dVRFA4ZjBFdU44WnVQaUVzZWdFek1CQnlEVHZVUDNodzA5UWJCMTVXWFBlS3oxZG15NjRfUW9ieFp3Zmp2d1laWnN0V3ZKZXlGVEZJNlZKeVBmTnVPSi1lYmJFUi1XRzRPa2hVaXNpTWJnRXJqVnJjYmtqYWF1ekJ5Z29Zc1M0NWU2QUtfRGpWUDJOMEdVWGc?oc=5", "Tags": "DORA, Operational Resilience"}, {"Source": "DORA Updates", "Title": "IBM Designated as a Critical Third-Party Provider Under EU DORA - IBM Newsroom", "Link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOZE41TVdXMkE2X2NfT0hPbDlkOTBNWFdpeDhXcHRkVTlKbFc3M09LMjBUbWI4WDl1ZnF5LTVmNVlEMnluOFRyYWRCYVhnVUNIWTVCeGo0V0JSdWdWN2dGTzBFYU9FR2NKRFV3dEVFVnMwbUhsazU1WkxLVXFReVRMeU9KN09NNXUtUUVHWWZvRHhyeklsd2p4WXRrUnRoRU9W?oc=5", "Tags": "DORA"}, {"Source": "DORA Updates", "Title": "Exadata and Recovery Appliance help Customers align with Digital Operational Resilience Act (DORA) - Oracle Blogs", "Link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOS3VWc3F5SUxUejJ6LVdaRGdhM3ZYS3JUcEl0bnFySFJvZ3dlNEl5SjRKdlFmRE9oMERTeU9MRlVKS1pwUUJGbU10c29RQUxtTDdnN2dNYUdlYk52ZXpORXhmQjZFdDBWU3JXaWNOWFNMR1BialN5ODhxektGckIxN09VTkdDVWVXNHRTNkYxMElWb2ozUFp5UVBXcU54OGQ3ejlIam8yZDI0M0V4TE9VWlNLLTVfX0g3UG5LcFZhTjY5RWY3QW00Yw?oc=5", "Tags": "DORA, Operational Resilience"}, {"Source": "DORA Updates", "Title": "Mythos and the rise of AI-driven cyber threats under DORA - Stibbe", "Link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZi1mYk9vN1NJQUdKTldkc2dRWEhTNHpCYy1nczltUmVEUTRtOUdlWlJ4LXoya0NrSDJNX1lOUHFmUzNyQnBNcjFHNFlEeUlHVnBRcFh5YWpON2FDMzNhM3RZcEQ5ZHJVYUhsT2ZMSXEwMHJka2liamNCOHd4dFpaSS1fZWRXRDhHQW94TmlPNmp0aHh1OWhmSXlXZE9lNXQ5elowSDZwLTZjdw?oc=5", "Tags": "DORA"}, {"Source": "DORA Updates", "Title": "As regulation intensifies, Microsoft helps financial leaders meet growing demands - Microsoft", "Link": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxObFBpa082V0Rzbk9TNzZrcGstMFdUN095N3ZySW1fZzlSTFpvbW9rc2pIOE4zaEVTSlVlMUxYaFp2SmV3SU1HVUhXdlJDS3pNakVmNEFCTFBKb2J3MmVJLUZuNEFYbVZ3OGt5NkNxX20xb2hQMlZ4SDFnUkxNclR6RGo5TmdXX0hkcHBUSHplVi1WaUxmUmxDWEJpakowMERuNEtyV014OGxqVW92bGg3ME10WVlobDlabzJOY0sxc3Exa2tlUGt6Ul92UDdJX3lsUnAyamZnTUVTbEpTRlpDeHBfY3VDRWJrbHBqUnFXSTR1TkFqc2xN?oc=5", "Tags": "Spain ENS"}, {"Source": "NIS2 Updates", "Title": "European Commission Announces Potential NIS2 Cybersecurity Reform With Implementation Well Underway - Skadden, Arps, Slate, Meagher & Flom LLP", "Link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNRkphNFdLZjU0WWptcTUwemF6Umh4bkJ1QlMzaWZuN05ZcUhBU3NCRTZPOTBETmlXUlBmcHJ5eHdWX0RmODZHcElqQTFKQlFUU0FuQ2lGaXJqcUhjZ1RhYmFZTjBBLXg2M3JDR012ODVLU1NSaGdsdHRJVXQtOTJwZG9lRE1Nd0o1WDlPRGQwTmlfdG81dEwzYjk1Q3U2Q3ZVX0NUMFRKOTY1UU9WdE1FeUxsXzNydERfek00?oc=5", "Tags": "NIS2"}, {"Source": "NIS2 Updates", "Title": "United Kingdom Proposes Changes in the Cyber Security and Resilience Bill to the NIS Regulations, with Key Differences to NIS2 - Mayer Brown", "Link": "https://news.google.com/rss/articles/CBMikwJBVV95cUxNX01zYVlqOGV4eHNGNW9wV0g2TldTTFNCQXBaX0FkZExZenZRTjVjRl9tUHJFckF6aVBWZ2tVXzNOeUdPZ0pxNTFsYW5YRVBLZTVMaUU1Vi13VHBwenRwZXdIZjhSNE1tS2dXOUFTOXJmLUdrc1hLMmtUVDF5TFJzNVZWRk54U2pZbnBNeVdGa2p3clRrUnRheHFsMVVMRmYwbWtRM3FGclpPV3BRUzhVdW9VVmpyeUxHTlFON3pySE94a2RQT0hFaTU1Mk9DaTBoa2EzekNzd1JXOFFEMTF1cU1lRkdKWmNsTy1zOE1nSERicGFZU3ZLNHhwNFhadExIeHJ5WDVDbHV2WkZJcWhuaC1JOA?oc=5", "Tags": "NIS2, Operational Resilience"}, {"Source": "NIS2 Updates", "Title": "European Commission Proposes Targeted Amendments to NIS2 to Simplify Compliance and Align With Proposed Cybersecurity Act 2 - Inside Privacy", "Link": "https://news.google.com/rss/articles/CBMijwJBVV95cUxQN2FZN0dJZHlLTko5N3JlSnhuMUhYVU0tMGNZSG5rTmxLdTFDZkxJRGl0V0pMN2hXcFJEUi1VOUZvUVRWLVJSTGVnNGE0ZXBNUUZWZGtZVTBaaWJNaVFQcTMtb0kyRXdWU05LbVBOMi11aTJ4V29KclYtVDhVSGt6VnJqdF9JQWJ5bXRZZmRYeDJGV0NvdmZCaEFzdl9fMkFfRDBHVUlpMmV4dTlLbC1lak1XRGlBcjI1M2pvWFV5emN4MHpCS0IzVGkzZUlxOWVHR3hBRHUxMkpOdU1ldnVDVGdBR0h5dkhNdzhNM25tY0l5NzJ6S3htX0RURURRdFFuV2ZyWlNKRkhCV0x4NVhj?oc=5", "Tags": "NIS2"}, {"Source": "NIS2 Updates", "Title": "What Is the NIS2 Directive? - NIS2 Compliance FAQs - Sophos", "Link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPdlhGWXQ1YWtxQnFrb05BU2F4Nmp1b3FHOW9oV3FFQW1NeGNJY3JKeExRcnZhTGswVGFSRjQ1Q1JTRTRxWjU0Z3pUcFRURDBhLUw3V1d6U3Job253MDFMMWxQd0hXUFhGelpsdFJnSzFWVHU0WFpFUEpFLU9kUng3YmpSdjNGQ3FvNjAzcA?oc=5", "Tags": "NIS2"}, {"Source": "NIS2 Updates", "Title": "NIS 2: One year later - White & Case LLP", "Link": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9sZkY0ak11RXNNUDN3Q201M1dET0VKREpVczFySXd0NnRCR200OG52ekVhcDlvQTkyRWZOa1d3QlgtYXBINHBPN0dCeDhzSFJiWUQwT3k0WjF3N3dtTF9zQzg0ZmFtUWxoNjE1dw?oc=5", "Tags": "NIS2"}, {"Source": "BSI C5 Updates", "Title": "Germany: BSI publishes updated Cloud Computing Compliance Criteria Catalog - DataGuidance", "Link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPYWUwSmV3N1VlUy11SUs5NnI0RmtLbUU3TjV1S25XbHpIWGNhU25pWVE5Tjl2RTdyaGUyZDhwRTdrczNWRmptaE52alhuVVM0aEZnYXpTNDdQU2Ftc2pTRm5EWm03ckxGajgxY1VMNDg0U2JaTGk4NVg5b2RJNVNwXzNhcW0zUQ?oc=5", "Tags": "BSI C5"}, {"Source": "BSI C5 Updates", "Title": "C3A - Criteria enabling Cloud Computing Autonomy - BSI - Bundesamt f\u00fcr Sicherheit in der Informationstechnik", "Link": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQQmx4OWlwSDlHdkVzc01OcnhmV3doMlg4RlBqdUpNVGhuZzVEbHZrSGItN0JBQ2NVdDRLUU1SeW4yMjFuYlhGTUx4SjJMU3gxNjZUYWR0RmNsSWNRTmZFZ25rdDRrVEdlTkw0eDExUUxNU3BPNnhjVnhwWDB3ZEpSMnZlRURRcVRJOEZ2UjBrNDNfdmFwcFFxbVpHSjF2RW8zNDFWX05Ib0ZDZVFoeXVwYkd1TjdaYkw4ZzI0enVQSk1NWHR4WVFwUTJKYml4MXV0aTdUM2ZXeTF6SkdTS19fTjVmeV9qdjByTDhIcXVzZFI2R01X?oc=5", "Tags": "General Cybersecurity"}, {"Source": "BSI C5 Updates", "Title": "IBM Cloud Expands C5 Compliance - IBM", "Link": "https://news.google.com/rss/articles/CBMieEFVX3lxTFBFbjJXWTEycERPMExRTl9YUkJrSHJqM0xsVjFRUzdEejZkTUpMMGtzTEhsb2tYSDZRSmg3dGgzWlU3bTIzZkRzMmFtbWVXcTB1QTJRQXFDMWFJM0xmck9oSEFpVnFkSVNvQUVSWEdLRklybFB4cS1qSQ?oc=5", "Tags": "General Cybersecurity"}, {"Source": "BSI C5 Updates", "Title": "Introducing new regional implementations of Landing Zone Accelerator on AWS to support digital sovereignty - Amazon Web Services (AWS)", "Link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQdWVRLUhqTFhpT2IyZ1ZicmRUbzhBa2ZnLTlNQ0FoS1A4OE5BNlIyVnZRbFJFbVZzbllxUU9xVXZBSG9HYXYxdGJ3cE1qWWpobThaTkhQbzlLbHZBb3haakpDeGI3cmlPTlBNWVJSWjNOWXpod0pURDNwaGlYWUE1N2pmeC1mSTdtZlRWQVh4NXpmclBaQmt5TlhPQTRTdE1kMW5BTmxTSjY1Rjdha1RaVndqSG9ZNFhtYUU5X0FKUVp0T2RVRHJkQk11NG40YTlEanRzUWIydE1MRUlLRnc?oc=5", "Tags": "General Cybersecurity"}, {"Source": "BSI C5 Updates", "Title": "Building trust in digital document security - Adobe", "Link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQSkhxWXZnNS1OM1l5QkhzTDA4a3lGUWJLbXRGVUE5UVJPTVk3QzgxVTJPeG9WN3QtLUVvMFFIaVBPVHp6S19pUFlUTTVJNk5URVhZVnRHcVJtRUp0WVBza1I5Unl4RkhpSFpaenBGdDZmT0s3TTV2Mm45Wlk4ZWoxVm4yVEhNanRHeE9JTm42THdfZw?oc=5", "Tags": "General Cybersecurity"}, {"Source": "EU AI Act Updates", "Title": "AI Act - EU Digital Strategy", "Link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFB3Um0wTW9MYVN3ZnEwZU1sMWxDTnNHYjM4cjg0OGhWa2k5N3Ywb3VfU2pVdEhlR0NqUVdwYUw5Zm82WFNUaGhGZ0o2anZxN2p5MFBiRURiQlJEMkNpLXZ3UEtUbjMzTDJoYzVtRjF1UWNpcVZnQnVUVnhCb1Jwdw?oc=5", "Tags": "EU AI Act"}, {"Source": "EU AI Act Updates", "Title": "U.S. Companies Face EU AI Act's Possible August 2026 Compliance Deadline - Holland & Knight", "Link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPdFE0b2tfRXFjNE55aVhfNm5ORkl6RnBOdGNFOWNrZmQ0aXVoaVVCNXk5Um9tTW9IZ3RFdlJFbmZyMGlualhIejRIWDEwdUJ4cGJtSF8tYjByWktQTGxGZnNOWFkxVmh1eXdCZVFVT19hdmZSc3g0dWlicE5aSi1QMHMyYzhfVjFUQmVuT3ktZHQwOGhQaEl5VnVrSktzMUZEeFVLWldnVlVCS3RNdVZtMktoaWxyUXcxUU9oYjVBYlNEUQ?oc=5", "Tags": "EU AI Act"}, {"Source": "EU AI Act Updates", "Title": "Cybersecurity Awareness Month in Focus, Part III: The EU AI Act Is Here\u2014What It Means for U.S. Employers - Ogletree", "Link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS2UyMUNnY0Zmd1pmNXZfeTd6akNwTHBNSF9JOEVwaDloMFdSa0ltLUZvYk8yOXZRWEFfaDNpV0dpQXBnSEI4ZjE1aUdsRzdmUGlDSE80SVdjeUlDM1FYeVFlM1Y5aXlqOFNFWmN1a2FwSjJrcllSdHNPcWYzQS1uNTJOR2pibU53RUNEYmoyRzVoVDJYUjh5TVRoWFZzZkdwMEZoLVhSVk4xVDBHSjlGaER5ak9udERFZ2RzSnRsTGwyU2Q1Q3VnbGRENkhxdVV4aG9SWEVNY3Y2LU5jTzJyZDlKRGVsUEpC?oc=5", "Tags": "EU AI Act"}, {"Source": "EU AI Act Updates", "Title": "Hunton Publishes AI Act Guide to Help Businesses Navigate EU\u2019s Landmark Regulation - Hunton Andrews Kurth LLP", "Link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPVmwtWHVXY25oUmxnWWJqMkRoSjFmbW9NRF96SmpXZGd0dnp2ZmJTbjZIUWJuYkVZUHAyUDhNSmVwN0FZR1hydkgtYWlsODg1OFZydFFVaU14cFE1bTIyV0NDOTJoSEhxY2ltVE41XzlfMzhnMXpDVFdiY0lYdnVjTDRzeklVdU1pa0pQNlc5WWh1TG5OVVRhYWpkWDQ0VTRhOUFRQ3N6Zy1VWWM4ellFWndEdTdVYVhIckM3c2t4aW5MY1ZUSlVma2hxa3ZEeW1QcFp0ODRB?oc=5", "Tags": "EU AI Act"}, {"Source": "EU AI Act Updates", "Title": "EU\u2019s Digital Omnibus offers AI regulatory relief, but questions remain - PwC", "Link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxObDZacDhOOVJta2dWZ1NFRFliXzFMTlA3M1I4cmRlSk5kRExLSFYtTWxHYzlvaWxzS0VxSFpDRVJoWklfRXJPTWRvc3N0bmNudnVaaW5CTzZvN0VxeWY2RWp6OVNjaG56OGh5VXdSS2hQelRYRGY5amxoblBVNFQ1eWJEX0l4WDdXU2tZYXd3TTJDaC1TRUVOelNVSWEzbXZRbWxJdTgxZkhXMElIVmtpSDBlc2RzcVgydzVpOTNjNEtsbWtBTnhnTTZfRC12enpMYWg1dnFEc3Rkem8?oc=5", "Tags": "General Cybersecurity"}];
 
-const data = [{"Source": "CISA News", "Title": "CISA Issues Updated RESURGE Malware Analysis Highlighting a Stealthy but Active Threat", "Link": "https://www.cisa.gov/news-events/news/cisa-issues-updated-resurge-malware-analysis-highlighting-stealthy-active-threat", "Tags": "General Cybersecurity"}, {"Source": "CISA News", "Title": "Immediate Action Required: CISA Issues Emergency Directive to Secure Cisco SD-WAN Systems", "Link": "https://www.cisa.gov/news-events/news/immediate-action-required-cisa-issues-emergency-directive-secure-cisco-sd-wan-systems", "Tags": "General Cybersecurity"}, {"Source": "CISA News", "Title": "CISA Announces New Town Halls to Engage with Stakeholders on Cyber Incident Reporting for Critical Infrastructure", "Link": "https://www.cisa.gov/news-events/news/cisa-announces-new-town-halls-engage-stakeholders-cyber-incident-reporting-critical-infrastructure", "Tags": "Operational Resilience"}, {"Source": "CISA News", "Title": "CISA\u2019s 2025 Year in Review: Driving Security and Resilience Across Critical Infrastructure", "Link": "https://www.cisa.gov/news-events/news/cisas-2025-year-review-driving-security-and-resilience-across-critical-infrastructure", "Tags": "Operational Resilience"}, {"Source": "CISA News", "Title": "CISA Releases Guide to Help Critical Infrastructure Users Adopt More Secure Communication", "Link": "https://www.cisa.gov/news-events/news/cisa-releases-guide-help-critical-infrastructure-users-adopt-more-secure-communication", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Who is the Kimwolf Botmaster \u201cDort\u201d?", "Link": "https://krebsonsecurity.com/2026/02/who-is-the-kimwolf-botmaster-dort/", "Tags": "Vulnerability Management"}, {"Source": "Krebs on Security", "Title": "\u2018Starkiller\u2019 Phishing Service Proxies Real Login Pages, MFA", "Link": "https://krebsonsecurity.com/2026/02/starkiller-phishing-service-proxies-real-login-pages-mfa/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Kimwolf Botnet Swamps Anonymity Network I2P", "Link": "https://krebsonsecurity.com/2026/02/kimwolf-botnet-swamps-anonymity-network-i2p/", "Tags": "General Cybersecurity"}, {"Source": "Krebs on Security", "Title": "Patch Tuesday, February 2026 Edition", "Link": "https://krebsonsecurity.com/2026/02/patch-tuesday-february-2026-edition/", "Tags": "Vulnerability Management"}, {"Source": "Krebs on Security", "Title": "Please Don\u2019t Feed the Scattered Lapsus ShinyHunters", "Link": "https://krebsonsecurity.com/2026/02/please-dont-feed-the-scattered-lapsus-shiny-hunters/", "Tags": "General Cybersecurity"}, {"Source": "NCSC UK", "Title": "Alert: NCSC advises UK organisations to take action following conflict in the Middle East", "Link": "https://www.ncsc.gov.uk/news/ncsc-advises-uk-organisations-take-action-following-conflict-in-middle-east", "Tags": "NCSC Guidance"}, {"Source": "NCSC UK", "Title": "Exploitation of Cisco Catalyst SD-WAN", "Link": "https://www.ncsc.gov.uk/news/exploitation-cisco-catalyst-sd-wans", "Tags": "General Cybersecurity"}, {"Source": "NCSC UK", "Title": "Can you help the NCSC with the next phase of EASM research?", "Link": "https://www.ncsc.gov.uk/blog-post/help-ncsc-with-next-phase-easm-research", "Tags": "NCSC Guidance"}, {"Source": "NCSC UK", "Title": "Improving your response to vulnerability management", "Link": "https://www.ncsc.gov.uk/blog-post/improving-your-response-to-vulnerability-management", "Tags": "Spain ENS, Vulnerability Management"}, {"Source": "NCSC UK", "Title": "Cloud Security Posture Management: silver bullet or another piece in the cloud puzzle?", "Link": "https://www.ncsc.gov.uk/blog-post/cspm-silver-bullet-or-another-piece-in-the-cloud-puzzle", "Tags": "General Cybersecurity"}, {"Source": "ENX / TISAX Updates", "Title": "ZEISS\u2019s Chief Transformation Officer on Why Cybersecurity Is a Board-Level Topic - Boston Consulting Group", "Link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1SU3NCM0ZSaGZxSWtla1lxYUptd0NUMzlXeHRfUERQVklvZkJ0bWZGVTdLa0NDelA2WUhRZnVrQ3dsNU14T0I5WUkyWFJ2S0pnQk9oZFVsaDVtVXVIa0FheUNSeThGNHR1ZVZqaEo3amJzWm9qQkZESW5mUGJTdw?oc=5", "Tags": "General Cybersecurity"}, {"Source": "ENX / TISAX Updates", "Title": "Building a mature automotive cybersecurity program beyond checklists - Help Net Security", "Link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOU0t4YTgtQTRZYWpfRWVmLXR5bG05VzZaNWVoNmYyUzRtQk56bG5SZjUxeHhBdUZmNzFhcWc5NHBrbVIwQ2NJVUVDT0hvTmVqUUJ1cGdEdG9CVERfX0RlNVNHRTljZi1ITkZ1VGRSNlRsNVl6MTF1Y2hXWnBhMlhxcEV2TlpLV2Z4UDliV2FFU1E5YjROZFpKNnJvZ0pjT2hJX1Q0?oc=5", "Tags": "Vulnerability Management"}, {"Source": "ENX / TISAX Updates", "Title": "SRM Tech earns TISAX AL3 label, elevating automotive cybersecurity credentials - Telematics Wire", "Link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOdGhYdnd5M2NRaHVXTHV0czJzWl9wcHhibjlOTG1hVF9ZMF9GZU53LVVEMmRyYmh5OUhxNFJ1T3AyMWtnNDFMWG5FMlBMSFA0bGhSaU9TMnZzN0I5NVdiVUVKazMwQjh3X29Sd0s5dlg5ZkhqNm10Y1RYd01TaFlpWEYwcmdzZlh4bGktdW50X2FPV190bGtOU2M5RHVDZk9ORmQ5T0ZCQmc?oc=5", "Tags": "TISAX"}, {"Source": "ENX / TISAX Updates", "Title": "SRM Tech Achieves TISAX Assessment Level (AL3) Label Strengthening Its Automotive Cybersecurity Standards - TheWire.in", "Link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPTnZBZE1FcDZrOURpQXI2c3Q3aERQNWszYWZMc3Y3T19uX2FnbC00b0xUNkktYnJEdTVDT3M4eGRraVh5dXZVZWR5eEVWSTNTQ0RpOW9fVF9vNzh6R0Z1UFd5LU9IQVp1aFZMZEQ4eWpRdUQ3OFNQbU9pMENBUW5PaEZZNkZEcXRELWRKU09LQmtucXpwdXA2RWFiaG5IdUladmpldjR1QUtaSDB3UHpVNWFodlhkMGduMFpEWlRRZEJub2VtU2doN0Jjbm5Xa0FlMkZFV1FhMkRfd9IB3wFBVV95cUxPX2pMOHFDWmdRQTFUU0pncllNcXVwWWU2Sk9YMjFjVm9RaHE3UDV1dkhrbXdOaXdxUi1taVlpY0VEeFVnWWlhUHhmaUNvNWNMNXhxNlVIZm1pdHBSVWFud1F0dXNTQzZKcDRSdUZDVHduZDQ0N1E2RHREQjc0ZFVHRENPNk9jVEw5eWZWZ1l0VTB3VE5xdUlMR2F0MnlCWWZ3NzJKcTBzUGVZdmFRXzdnd0F3MG41WnhNNklkb2xHVXl2dTVDcEtzYkhhQk9aNFY1WE5FWjg4V04tajZteldv?oc=5", "Tags": "TISAX"}, {"Source": "ENX / TISAX Updates", "Title": "DMS provider Pinewood beefs up cyber security - motortrader.com", "Link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQclZjNUZ3Nm1SODlQR3g0WDZiczJ2U1JwTXBlZzVrbWVPUFFOY2hreUhCRDgyNlhUd0Q4T2ctY0p6bWlDMC1xZU5ocU1MQ2phVk5JaDVMNXF4cDl3dng4RmYxY1Iyb3YwN0ZON0d1UE1ud1VESWZCSGlUbUI1VVlBUmJtRkw2UEJzUDJGSE1KXzNyRk1LZnhxTWxWSmdBYTlfcW90NzZYSVNsZmpleDFSUjJEM0pvUQ?oc=5", "Tags": "General Cybersecurity"}, {"Source": "Spain ENS Updates", "Title": "The Spanish National Security Framework (ENS) is Now Part of the Qualys Enterprise TruRisk\u2122 Platform - Qualys", "Link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOREpjQy1FUDJyeFFBYTVJcG90SkY2RGdocllVd0lsckpCbGpZNW40ZDlsYXRaQzFQTmc2dHRwYkhLS29kaXFiZkNNWXB5Qjh6UFhjVDJaR3AycV9SUnFPeW1Vb05JZERvUGZ2d25odmFpWTVhTHhlR25BQ0xWdkpoXzZwZENENERBR2lMM2pTUDRrakJvRWJaRndQaHExZC1FT3Zaek9jTW40WkFSOENxaVA0MVFwWjhaYTExQlpRWmdIU1BJUWdaU3FVVXpZaHBzSUR4bmVIbHQ0bGNMVnc?oc=5", "Tags": "TISAX, Spain ENS"}, {"Source": "Spain ENS Updates", "Title": "Telef\u00f3nica to aid hyperscalers on infra, service compliance in Spain \u2014 report - TelcoTitans.com", "Link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOSmpuNTd0aXkteHRhdzMxa0EtQW9FeWxWX0lsVVpZMmlJcGF2SE9fd0ZaNmFPMmllbXJnczAySTg4N3M2VU4zYTFKMTRSRTNkc2I0MWc0azZVNlVKSnd1Vng1NnJoRTJIcGFwcGNfbUROQWtoYzlIUElwdUFaejBGejZoV2J0NW1UUjRrNzk1czBzcVdaVE9VNGd1X2dfcnlZdUlBZEdqdzdScWtOY3NjanhYQjU3RUpwMi1HQkFVT2NXQnhpbEdZREQwVlY?oc=5", "Tags": "General Cybersecurity"}, {"Source": "Spain ENS Updates", "Title": "AWS expands Spain\u2019s ENS High certification across 174 services - Amazon Web Services (AWS)", "Link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPbjRRcGZsTWFnMVZ1QWlSUWdCbjQ5cWJCVWd0V191RkhKYkNuak11X3NOdFNyeXphQUsxeWdIbHh6OXIzMW1NR1RwWHF4LXJNVDFJT2RCV3d1NTZrc2t6YWRnY2Q3NS1tRDVrU0tMSmt2U1FieG5nYXZpTTA4NEpvNkFyVnpqODdHeUV5S1oyRzJlSXc0bDJMQWwxRHY4VmFzUVE?oc=5", "Tags": "Spain ENS"}, {"Source": "Spain ENS Updates", "Title": "Yubico Announces Availability of the YubiKey 5 CCN Series, First Hardware Security Key to Secure 'ENS Alta' Rating in Spanish National Cryptologic Center (CCN)'s CPSTIC Catalogue - Business Wire", "Link": "https://news.google.com/rss/articles/CBMizgJBVV95cUxPcXZPQ0Z6UFdteWFnNXF1TENVZ0RoanhzM1dqclpPNUhmUEtNakZmb0RkM3hqanFXVTMzZ2k5blNlNGJRUVJjMjktMm9NSmNScG5oMGt5OFNDNEprNHJHR1dzczFnTFAxa2FULUZXVVpCMzBBTmZTdHVyaHpJT2dtdVoxMTJtRmlsTDM3OXFoa3lMVkdISjIyTXNiZ1d6bWp5ZFJQYTdiLWwzdHBvOF93ZzB1eUJNYmRYLTIzQ1pTMUJta2MwYTZNVFdyeDZfVWRsRUh2dFRBUENJZlBDZXI3RWpwSUh5UURtbVpkcU9feWYyTXlCYVAxNG1YXzg1Ml9ocDZ4bndJU0txc1hfLVpNUDFjcHRJNmNOUm53eDE5U3FIY2pBWVcyN3lkX2M2RW5qTldCSlZlQmFjN2RwU25fLXY4MUNfQ0dkNC1YeDBB?oc=5", "Tags": "Spain ENS"}, {"Source": "Spain ENS Updates", "Title": "Spain\u2019s NIS2 Cybersecurity Overhaul: Prepare for the New Cybersecurity Framework - Osborne Clarke", "Link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQUmZRcXlNaGJ4UzZ1Z2l5WFhEM1hkX1hQVG5pOHBST1NNLVNHMGRRbU9SRm1sclVGZXFKNVBVMy1reG1jQ2dOZjZmODVnWTlodDNQQV9SeVRIMnFDWEpCU09lWXhUWUI4UjFIR0Y4cV9tU2FRTU93QWI2WnQzVnZEZDBQZ2lNSlhGZ3dORHJxWnNVX0ZQWVM4WGRPVUZRX2FWcEkwNkdLbjJjLUFTNmc?oc=5", "Tags": "General Cybersecurity"}, {"Source": "NVD CVE Feed", "Title": "CVE-2017-20187", "Link": "https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-20187", "Tags": "Vulnerability Management"}, {"Source": "NVD CVE Feed", "Title": "CVE-2017-7252", "Link": "https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2017-7252", "Tags": "Vulnerability Management"}, {"Source": "NVD CVE Feed", "Title": "CVE-2018-25092", "Link": "https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2018-25092", "Tags": "Vulnerability Management"}, {"Source": "NVD CVE Feed", "Title": "CVE-2018-25093", "Link": "https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2018-25093", "Tags": "Vulnerability Management"}, {"Source": "NVD CVE Feed", "Title": "CVE-2020-28407", "Link": "https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2020-28407", "Tags": "Vulnerability Management"}];
+function getTagClass(tag) {
+  const map = {
+    'DORA': 'tag-dora',
+    'NIS2': 'tag-nis2',
+    'BSI C5': 'tag-bsi',
+    'EU AI Act': 'tag-ai',
+    'TISAX': 'tag-tisax',
+    'Spain ENS': 'tag-ens',
+    'Cyber Essentials': 'tag-ce',
+    'NCSC Guidance': 'tag-ncsc',
+    'Vulnerability Management': 'tag-vuln',
+    'General Cybersecurity': 'tag-general',
+    'Operational Resilience': 'tag-ops',
+  };
+  return map[tag.trim()] || 'tag-general';
+}
 
-let htmlContent = "";
+let currentFilter = 'all';
 
-data.forEach(item => {
-    htmlContent += `
-        <div class="card">
-        <h3><a href="${item.Link}" target="_blank">${item.Title}</a></h3>
-        <p><b>Source:</b> ${item.Source}</p>
-        <p><span class="tag">${item.Tags}</span></p>
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResults();
+}
+
+function renderResults() {
+  const container = document.getElementById('results');
+  const filtered = currentFilter === 'all'
+    ? data
+    : data.filter(item => item.Tags.includes(currentFilter));
+
+  document.getElementById('showing-count').textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty"><p>No items found for this filter.</p></div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map((item, i) => {
+    const tags = item.Tags.split(',').map(t => t.trim());
+    const tagHtml = tags.map(t => `<span class="tag ${getTagClass(t)}">${t}</span>`).join(' ');
+    return `
+      <div class="card" style="animation-delay:${i * 0.04}s">
+        <div class="card-top">
+          <p class="card-title"><a href="${item.Link}" target="_blank" rel="noopener">${item.Title}</a></p>
+          <span class="card-arrow">↗</span>
         </div>
-    `;
-})
+        <div class="card-meta">
+          <span class="card-source">${item.Source}</span>
+          ${tagHtml}
+        </div>
+      </div>`;
+  }).join('');
+}
 
-document.getElementById("results").innerHTML = htmlContent;
+function updateCounts() {
+  const countMap = {};
+  data.forEach(item => {
+    item.Tags.split(',').forEach(t => {
+      const key = t.trim();
+      countMap[key] = (countMap[key] || 0) + 1;
+    });
+  });
 
+  document.getElementById('count-all').textContent = data.length;
+  document.getElementById('total-count').textContent = data.length;
+  document.getElementById('count-dora').textContent = countMap['DORA'] || 0;
+  document.getElementById('count-nis2').textContent = countMap['NIS2'] || 0;
+  document.getElementById('count-bsi').textContent = countMap['BSI C5'] || 0;
+  document.getElementById('count-ai').textContent = countMap['EU AI Act'] || 0;
+  document.getElementById('count-tisax').textContent = countMap['TISAX'] || 0;
+  document.getElementById('count-ens').textContent = countMap['Spain ENS'] || 0;
+  document.getElementById('count-ce').textContent = countMap['Cyber Essentials'] || 0;
+  document.getElementById('count-ncsc').textContent = countMap['NCSC Guidance'] || 0;
+  document.getElementById('count-vuln').textContent = countMap['Vulnerability Management'] || 0;
+  document.getElementById('count-general').textContent = countMap['General Cybersecurity'] || 0;
+}
+
+updateCounts();
+renderResults();
 </script>
-
 </body>
 </html>
